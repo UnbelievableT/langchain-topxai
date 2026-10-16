@@ -32,7 +32,7 @@ msg = ChatTopxAI(model="deepseek-flash").invoke("What is 17 * 3?")
 msg.additional_kwargs.get("reasoning_content")
 ```
 
-`with_structured_output` uses JSON Schema by default (`method="json_schema"`, as in `ChatOpenAI`), which works on every text model, Claude included. Claude models with thinking refuse a forced tool call, so `method="function_calling"` fails for them.
+`with_structured_output` uses JSON Schema by default (`method="json_schema"`, as in `ChatOpenAI`), which works on every text model, Claude included. The Claude models (`claude-sonnet-5-5`, `claude-opus-5-5`, `claude-fable-5-1`) do not accept a forced tool call, so `method="function_calling"` fails for them.
 
 ## Configuration
 
