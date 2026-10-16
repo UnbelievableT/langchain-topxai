@@ -32,13 +32,7 @@ msg = ChatTopxAI(model="deepseek-flash").invoke("What is 17 * 3?")
 msg.additional_kwargs.get("reasoning_content")
 ```
 
-Whether a model honours JSON Schema output depends on the model. For Claude models, structured output is also available through `langchain-anthropic`'s `ChatAnthropic` pointed at TopxAI's Anthropic-compatible endpoint:
-
-```python
-from langchain_anthropic import ChatAnthropic
-
-claude = ChatAnthropic(model="claude-sonnet-5-5", base_url="https://ai.topxea.com", api_key="...")
-```
+`with_structured_output` uses JSON Schema by default (`method="json_schema"`), which works on every text model, Claude included. Claude models with thinking refuse a forced tool call, so `method="function_calling"` fails for them.
 
 ## Configuration
 

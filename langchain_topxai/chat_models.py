@@ -137,10 +137,9 @@ class ChatTopxAI(BaseChatOpenAI):
         structured_model.invoke("Tell me a joke about cats")
         ```
 
-        Whether a model honours JSON Schema output depends on the model. For
-        Claude models, structured output is also available through
-        `langchain-anthropic`'s `ChatAnthropic` with
-        `base_url="https://ai.topxea.com"`.
+        The default method, `json_schema`, works on every text model. Claude
+        models with thinking refuse a forced tool call, so
+        `method="function_calling"` fails for them.
 
     Reasoning:
         For models that return their reasoning (for example `deepseek-flash`
