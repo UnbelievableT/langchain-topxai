@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 import openai
-from langchain_core.language_models import LangSmithParams
+from langchain_core.language_models import LangSmithParams, LanguageModelInput
 from langchain_core.messages import AIMessageChunk
 from langchain_core.outputs import ChatGenerationChunk, ChatResult
+from langchain_core.runnables import Runnable
 from langchain_core.utils import from_env, secret_from_env
 from langchain_openai.chat_models.base import BaseChatOpenAI
-from pydantic import ConfigDict, Field, SecretStr, model_validator
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, model_validator
 from typing_extensions import Self
 
 import langchain_topxai._content_blocks  # noqa: F401  (registers the topxai translator)
@@ -198,6 +199,37 @@ class ChatTopxAI(BaseChatOpenAI):
         Responses API settings.
         """
         return False
+
+    def with_structured_output(
+        self,
+        schema: dict[str, Any] | type[BaseModel] | None = None,
+        *,
+        method: Literal["function_calling", "json_mode", "json_schema"] = "json_schema",
+        include_raw: bool = False,
+        strict: bool | None = None,
+        **kwargs: Any,
+    ) -> Runnable[LanguageModelInput, dict[str, Any] | BaseModel]:
+        """Model wrapper that returns outputs formatted to match the given schema.
+
+        Same as `BaseChatOpenAI.with_structured_output`, except that the default
+        method is `json_schema`, as in `ChatOpenAI`. TopxAI honours JSON Schema
+        on every text model, while Claude models with thinking refuse the forced
+        tool call that `function_calling` sends.
+
+        Args:
+            schema: The output schema, as a Pydantic class, TypedDict, JSON
+                Schema dict or OpenAI function/tool schema.
+            method: `json_schema` (default), `function_calling` or `json_mode`.
+            include_raw: If `True`, return the raw message and the parsed output.
+            strict: Passed to the provider as the schema's `strict` flag.
+            **kwargs: Passed to `BaseChatOpenAI.with_structured_output`.
+
+        Returns:
+            A runnable that returns the parsed output.
+        """
+        return super().with_structured_output(
+            schema, method=method, include_raw=include_raw, strict=strict, **kwargs
+        )
 
     def _get_ls_params(
         self,

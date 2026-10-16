@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from langchain_core.messages import AIMessage, AIMessageChunk, HumanMessage
-from langchain_core.runnables import RunnableBinding
+from langchain_core.runnables import RunnableBinding, RunnableSequence
 from langchain_tests.unit_tests import ChatModelUnitTests
 from openai import BaseModel
 from openai.types.chat import ChatCompletion, ChatCompletionMessage
@@ -294,3 +294,17 @@ def test_tool_call_chunk_index_does_not_collide_with_text() -> None:
     )
     blocks = chunk.content_blocks
     assert [dict(block).get("index") for block in blocks] == ["lc_tc_0"]
+
+
+def test_structured_output_defaults_to_json_schema() -> None:
+    class City(PydanticModel):
+        name: str
+
+    model = ChatTopxAI(model="claude-sonnet-5-5", api_key=SecretStr("api_key"))
+    structured = model.with_structured_output(City)
+    assert isinstance(structured, RunnableSequence)
+    binding = structured.first
+    assert isinstance(binding, RunnableBinding)
+    assert binding.kwargs["response_format"] is City
+    assert "tools" not in binding.kwargs
+    assert "tool_choice" not in binding.kwargs
