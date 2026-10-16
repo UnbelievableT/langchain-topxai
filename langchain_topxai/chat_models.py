@@ -138,8 +138,8 @@ class ChatTopxAI(BaseChatOpenAI):
         structured_model.invoke("Tell me a joke about cats")
         ```
 
-        The default method, `json_schema`, works on every text model. Claude
-        models do not accept a forced tool call, so `method="function_calling"`
+        The default method is `json_schema`. Keep it for the Claude models:
+        they do not accept a forced tool call, so `method="function_calling"`
         fails for them.
 
     Reasoning:
@@ -212,9 +212,8 @@ class ChatTopxAI(BaseChatOpenAI):
         """Model wrapper that returns outputs formatted to match the given schema.
 
         Same as `BaseChatOpenAI.with_structured_output`, except that the default
-        method is `json_schema`, as in `ChatOpenAI`. TopxAI honours JSON Schema
-        on every text model, while the Claude models do not accept the forced tool
-        call that `function_calling` sends.
+        method is `json_schema`, as in `ChatOpenAI`. The Claude models do not
+        accept the forced tool call that `function_calling` sends.
 
         Args:
             schema: The output schema, as a Pydantic class, TypedDict, JSON
