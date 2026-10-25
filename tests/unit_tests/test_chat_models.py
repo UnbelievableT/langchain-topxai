@@ -17,7 +17,7 @@ from pydantic import SecretStr
 from langchain_topxai import ChatTopxAI, __version__
 from langchain_topxai.chat_models import DEFAULT_API_BASE
 
-MODEL_NAME = "kimi-k3"
+MODEL_NAME = "kimi-k3.1-pro"
 
 
 class MockOpenAIResponse(BaseModel):
@@ -145,7 +145,7 @@ def test_ls_params_and_llm_type() -> None:
 
 
 def test_reasoning_content_in_result() -> None:
-    model = ChatTopxAI(model="deepseek-flash", api_key=SecretStr("api_key"))
+    model = ChatTopxAI(model="deepseek-flash-Abliterated", api_key=SecretStr("api_key"))
     mock_message = MagicMock()
     mock_message.content = "51"
     mock_message.reasoning_content = "17 times 3 is 51."
@@ -162,7 +162,7 @@ def test_reasoning_content_in_result() -> None:
 
 
 def test_reasoning_content_from_dict_response() -> None:
-    model = ChatTopxAI(model="kimi-k3", api_key=SecretStr("api_key"))
+    model = ChatTopxAI(model="kimi-k3.1-pro", api_key=SecretStr("api_key"))
     response = {
         "choices": [
             {
@@ -227,7 +227,7 @@ def test_no_reasoning_key_when_absent() -> None:
 
 @pytest.mark.parametrize("field", ["reasoning_content", "reasoning"])
 def test_reasoning_content_in_stream(field: str) -> None:
-    model = ChatTopxAI(model="deepseek-flash", api_key=SecretStr("api_key"))
+    model = ChatTopxAI(model="deepseek-flash-Abliterated", api_key=SecretStr("api_key"))
     chunk = {
         "choices": [{"delta": {"content": "", field: "Thinking..."}}],
     }

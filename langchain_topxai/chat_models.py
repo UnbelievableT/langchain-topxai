@@ -52,8 +52,8 @@ class ChatTopxAI(BaseChatOpenAI):
 
     Key init args — completion params:
         model:
-            Model id, for example `kimi-k3`, `gpt-6.1-sol`, `grok-4.7`,
-            `deepseek-flash` or `claude-sonnet-5-5`.
+            Model id, for example `kimi-k3.1-pro`, `gpt-6.1-sol`, `grok-4.7`,
+            `deepseek-flash-Abliterated` or `claude-sonnet-5-5`.
         temperature:
             Sampling temperature.
         max_tokens:
@@ -79,8 +79,7 @@ class ChatTopxAI(BaseChatOpenAI):
         from langchain_topxai import ChatTopxAI
 
         model = ChatTopxAI(
-            model="kimi-k3",
-            temperature=0,
+            model="kimi-k3.1-pro",
             max_tokens=None,
             timeout=None,
             max_retries=2,
@@ -134,7 +133,7 @@ class ChatTopxAI(BaseChatOpenAI):
             punchline: str = Field(description="The punchline to the joke")
 
 
-        structured_model = model.with_structured_output(Joke)
+        structured_model = ChatTopxAI(model="claude-sonnet-5-5").with_structured_output(Joke)
         structured_model.invoke("Tell me a joke about cats")
         ```
 
@@ -143,8 +142,8 @@ class ChatTopxAI(BaseChatOpenAI):
         fails for them.
 
     Reasoning:
-        For models that return their reasoning (for example `deepseek-flash`
-        and `kimi-k3`), the text is in
+        When a model returns a Chat Completions `reasoning_content` field,
+        the text is in
         `ai_msg.additional_kwargs["reasoning_content"]`, also when streaming.
 
     Token usage:
