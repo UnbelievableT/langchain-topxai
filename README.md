@@ -1,6 +1,6 @@
 # langchain-topxai
 
-LangChain chat model for [TopxAI](https://ai.topxea.com), an API gateway that serves Claude, GPT, Grok, GLM, Kimi and DeepSeek models through one OpenAI-compatible endpoint at fixed USD prices per route.
+LangChain chat model for [TopxAI](https://ai.topxea.com?utm_source=github&utm_medium=readme&utm_campaign=langchain-topxai), an API gateway that serves Claude, GPT, Grok, GLM, Kimi and DeepSeek models through one OpenAI-compatible endpoint at fixed USD prices per route.
 
 ## Installation
 
