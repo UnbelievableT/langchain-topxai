@@ -211,6 +211,54 @@ def test_reasoning_from_real_chat_completion(field: str) -> None:
     assert message.response_metadata["model_provider"] == "topxai"
 
 
+@pytest.mark.parametrize("sdk_response", [False, True])
+@pytest.mark.parametrize("field", ["reasoning_content", "reasoning"])
+def test_each_candidate_keeps_its_reasoning(*, sdk_response: bool, field: str) -> None:
+    reasonings = ["First reasoning", "Second reasoning", None]
+    model = ChatTopxAI(
+        model="deepseek-flash-Abliterated",
+        api_key=SecretStr("api_key"),
+        n=len(reasonings),
+    )
+    response = {
+        "id": "chatcmpl-candidates",
+        "object": "chat.completion",
+        "created": 0,
+        "model": "deepseek-flash-Abliterated",
+        "choices": [
+            {
+                "index": index,
+                "finish_reason": "stop",
+                "message": {
+                    "role": "assistant",
+                    "content": f"Answer {index}",
+                    **({field: reasoning} if reasoning is not None else {}),
+                },
+            }
+            for index, reasoning in enumerate(reasonings)
+        ],
+    }
+    result = model._create_chat_result(
+        ChatCompletion.model_validate(response) if sdk_response else response
+    )
+    assert len(result.generations) == len(reasonings)
+    for index, (generation, reasoning) in enumerate(
+        zip(result.generations, reasonings, strict=True)
+    ):
+        message = generation.message
+        assert message.content == f"Answer {index}"
+        assert message.response_metadata["model_provider"] == "topxai"
+        if reasoning is not None:
+            assert message.additional_kwargs["reasoning_content"] == reasoning
+            assert message.content_blocks[0] == {
+                "type": "reasoning",
+                "reasoning": reasoning,
+            }
+        else:
+            assert "reasoning_content" not in message.additional_kwargs
+            assert all(block["type"] != "reasoning" for block in message.content_blocks)
+
+
 def test_no_reasoning_key_when_absent() -> None:
     model = ChatTopxAI(model="gpt-6.1-sol", api_key=SecretStr("api_key"))
     response = {

@@ -306,16 +306,17 @@ class ChatTopxAI(BaseChatOpenAI):
 
         if isinstance(response, dict):
             choices = response.get("choices") or []
-            message = choices[0].get("message", {}) if choices else {}
         else:
             choices = getattr(response, "choices", None) or []
-            message = choices[0].message if choices else None
-        if message is not None and rtn.generations:
+        for generation, choice in zip(rtn.generations, choices, strict=False):
+            message = (
+                choice.get("message")
+                if isinstance(choice, dict)
+                else getattr(choice, "message", None)
+            )
             reasoning = _reasoning_from(message)
             if reasoning is not None:
-                rtn.generations[0].message.additional_kwargs["reasoning_content"] = (
-                    reasoning
-                )
+                generation.message.additional_kwargs["reasoning_content"] = reasoning
         return rtn
 
     def _convert_chunk_to_generation_chunk(
