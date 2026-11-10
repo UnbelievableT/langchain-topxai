@@ -34,7 +34,7 @@ msg.additional_kwargs.get("reasoning_content")
 
 Kimi K3.1 Pro uses always-on reasoning; omit sampling controls such as `temperature`. See its [model guide](https://ai.topxea.com/docs/kimi-k3-1-pro) for supported parameters.
 
-`with_structured_output` uses JSON Schema by default (`method="json_schema"`, as in `ChatOpenAI`). Keep the default for the Claude models (`claude-sonnet-5-5`, `claude-opus-5-5`, `claude-fable-5-1`): they do not accept a forced tool call, so `method="function_calling"` fails for them.
+`with_structured_output` uses JSON Schema by default (`method="json_schema"`, as in `ChatOpenAI`). Keep the default for the Claude models (`claude-sonnet-5-5`, `claude-opus-5-5`, `claude-fable-5-2`): they do not accept a forced tool call, so `method="function_calling"` fails for them.
 
 The catalogue was checked on 2026-11-08. `kimi-k3`, `deepseek-flash` and `deepseek-v4-pro` are retired and are rejected; they are not aliases. Every model on the GLM, Kimi and DeepSeek lines is a private deployment at fixed prices: `GLM-5.3-Abliterated`, `GLM-5.3-Flash-Abliterated`, `kimi-k3.1-pro`, `deepseek-flash-Abliterated` and `deepseek-flash-fast`. Check the [live catalogue](https://ai.topxea.com/pricing) and the model page for current capabilities and prices; support varies by model.
 
