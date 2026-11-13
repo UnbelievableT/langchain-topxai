@@ -81,8 +81,8 @@ class TestChatTopxAIUnit(ChatModelUnitTests):
 
 def test_default_base_url() -> None:
     model = ChatTopxAI(model=MODEL_NAME, api_key=SecretStr("api_key"))
-    assert model.api_base == DEFAULT_API_BASE == "https://ai.topxea.com/v1"
-    assert str(model.root_client.base_url) == "https://ai.topxea.com/v1/"
+    assert model.api_base == DEFAULT_API_BASE == "https://api.topxai.xyz/v1"
+    assert str(model.root_client.base_url) == "https://api.topxai.xyz/v1/"
 
 
 def test_missing_key_on_default_base_url(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -93,7 +93,7 @@ def test_missing_key_on_default_base_url(monkeypatch: pytest.MonkeyPatch) -> Non
 
 
 @pytest.mark.parametrize(
-    "base_url", ["https://proxy.example/v1", "https://ai.topxea.com/v1/"]
+    "base_url", ["https://proxy.example/v1", "https://api.topxai.xyz/v1/"]
 )
 def test_never_falls_back_to_openai_key(
     monkeypatch: pytest.MonkeyPatch, base_url: str

@@ -17,7 +17,7 @@ from typing_extensions import Self
 import langchain_topxai._content_blocks  # noqa: F401  (registers the topxai translator)
 from langchain_topxai._version import __version__
 
-DEFAULT_API_BASE = "https://ai.topxea.com/v1"
+DEFAULT_API_BASE = "https://api.topxai.xyz/v1"
 
 
 def _reasoning_from(container: Any) -> str | None:
@@ -39,11 +39,11 @@ class ChatTopxAI(BaseChatOpenAI):
 
     TopxAI serves Claude, GPT, Grok, GLM, Kimi and DeepSeek models through one
     OpenAI-compatible Chat Completions endpoint, at fixed USD prices per route.
-    The model ids and prices are listed at https://ai.topxea.com/pricing.
+    The model ids and prices are listed at https://api.topxai.xyz/pricing.
 
     Setup:
         Install `langchain-topxai` and set the environment variable
-        `TOPXAI_API_KEY` to a key from https://ai.topxea.com/keys.
+        `TOPXAI_API_KEY` to a key from https://api.topxai.xyz/keys.
 
         ```bash
         pip install -U langchain-topxai
@@ -69,7 +69,7 @@ class ChatTopxAI(BaseChatOpenAI):
             `TOPXAI_API_KEY`.
         base_url:
             API base URL. If not passed in, read from env var
-            `TOPXAI_API_BASE`, then defaults to `https://ai.topxea.com/v1`.
+            `TOPXAI_API_BASE`, then defaults to `https://api.topxai.xyz/v1`.
 
     See the full list of supported init args and their descriptions in the params
     section.
@@ -255,7 +255,7 @@ class ChatTopxAI(BaseChatOpenAI):
             msg = (
                 "ChatTopxAI calls the Chat Completions API only. For TopxAI's "
                 "Responses API, use langchain-openai's ChatOpenAI with "
-                "base_url='https://ai.topxea.com/v1' and use_responses_api=True."
+                "base_url='https://api.topxai.xyz/v1' and use_responses_api=True."
             )
             raise ValueError(msg)
         if not (self.api_key and self.api_key.get_secret_value()):
